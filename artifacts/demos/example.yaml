@@ -1,0 +1,9 @@
+apiVersion: example.app/v1beta1
+kind: Canary
+metadata:
+  name: podinfo
+  namespace: test
+spec:
+  image: "podinfo:latest"
+  cron: "0 0 0 */1 * ?"
+  replicas: 1

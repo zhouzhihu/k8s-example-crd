@@ -1,0 +1,53 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # 名字必需与下面的 spec 字段匹配，并且格式为 '<名称的复数形式>.<组名>'
+  name: canaries.example.app
+spec:
+  # 组名称，用于 REST API: /apis/<组>/<版本>
+  group: example.app
+  names:
+    # kind 通常是单数形式的驼峰编码（CamelCased）形式。你的资源清单会使用这一形式。
+    kind: Canary
+    # 名称的复数形式，用于 URL：/apis/<组>/<版本>/<名称的复数形式>
+    plural: canaries
+    # 名称的单数形式，作为命令行使用时和显示时的别名
+    singular: canary
+  # 可以是 Namespaced 或 Cluster
+  scope: Namespaced
+  # 列举此 CustomResourceDefinition 所支持的版本
+  versions:
+    - name: v1beta1
+      # 每个版本都可以通过 served 标志来独立启用或禁止
+      served: true
+      # 其中一个且只有一个版本必需被标记为存储版本
+      storage: true
+      schema:
+        openAPIV3Schema:
+          description: Canary is the Schema for the Canary API.
+          type: object
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object.'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. '
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: CanarySpec defines the desired state of a Canary.
+              type: object
+              required:
+                - cron
+                - replicas
+              properties:
+                image:
+                  description: Deployment image
+                  type: string
+                cron:
+                  description: Run Cron
+                  type: string
+                replicas:
+                  description: Deployment replicas
+                  type: integer
